@@ -150,6 +150,33 @@
 \cug@define@fontsize{cug@xiaowu}{9bp}
 
 %──────────────────────────────────────────────────────────
+%  仿宋：仅规范 3.3 的书脊需要（「书脊用仿宋」）。
+%  正文与标题均不用仿宋，故单独探测、单独命名，不影响其它排版。
+%──────────────────────────────────────────────────────────
+\newcommand{\cug@fangsong@name}{（未找到）}
+\IfFontExistsTF{FangSong}{%
+    \newCJKfontfamily\cugbookspinefont{FangSong}%
+    \renewcommand{\cug@fangsong@name}{FangSong（系统仿宋 simfang.ttf）}%
+}{%
+    \IfFontExistsTF{Adobe Fangsong Std}{%
+        \newCJKfontfamily\cugbookspinefont{Adobe Fangsong Std}%
+        \renewcommand{\cug@fangsong@name}{Adobe Fangsong Std}%
+    }{%
+        \IfFontExistsTF{STFangsong}{%
+            \newCJKfontfamily\cugbookspinefont{STFangsong}%
+            \renewcommand{\cug@fangsong@name}{STFangsong}%
+        }{%
+            % 都没有：退回宋体，并明确警告（不静默）
+            \newCJKfontfamily\cugbookspinefont{SimSun}%
+            \PackageWarning{cugthesisfont}{%
+                未找到仿宋字体，书脊将改用宋体排版。\MessageBreak
+                规范 3.3 要求书脊用仿宋，建议安装仿宋后重新编译%
+            }%
+        }%
+    }%
+}
+
+%──────────────────────────────────────────────────────────
 %  字体自检报告：投稿前可在正文任意处调用一次核对
 %──────────────────────────────────────────────────────────
 \newcommand{\cugfontsreport}{%
@@ -160,6 +187,7 @@
     \noindent 中文正文（规范要求宋体）：\cug@cjk@serif@name\par
     \noindent 中文标题（规范要求黑体）：\cug@cjk@sans@name\par
     \noindent 西文（规范要求 Times New Roman）：\cug@latin@name\cug@latin@note\par
+    \noindent 仿宋（规范 3.3 书脊用）：\cug@fangsong@name\par
     \noindent\rule{\textwidth}{0.4pt}\par
     \endgroup
 }

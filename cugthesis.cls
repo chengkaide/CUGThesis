@@ -323,10 +323,12 @@
 }
 
 %--------------- Title Page ----------------
-\newcommand{\cug@make@title}{
-    \begin{titlepage}
-        \thispagestyle{empty}
-        \begin{center}\leavevmode
+\newcommand{\cug@make@title}{%
+    % 不用 titlepage 环境：它在双面模式下以 \cleardoublepage 开头，
+    % 会在封面与题名页之间插一张空白页；而规范 3.10 要求中文摘要之前单面印刷。
+    \clearpage
+    \thispagestyle{empty}%
+    \begin{center}\leavevmode
             \ifcug@bachelor
                 {\cug@sanhao\cug@studentidline{本科生学号}}
             \else
@@ -342,14 +344,14 @@
             {\cug@sanhao{\@date}}%
             \vspace*{\baselineskip}
         \end{center}
-        \clearpage
-        \thispagestyle{empty}
-    \end{titlepage}
+    \clearpage
 }
 %\renewcommand\arraystretch{1} % 将行距还原
 
 \newcommand{\cug@make@entitle}{%
-    \cleardoublepage 
+    % 规范 3.10：中文摘要之前的部分单面印刷，故用 \clearpage 而非 \cleardoublepage
+    % （后者在双面模式下会插入空白页，单面印刷时这几页纯属多余）。
+    \clearpage 
     \thispagestyle{empty}
     \begin{center}
         \leavevmode
@@ -432,7 +434,8 @@
             \fi
         \fi
     \fi
-    \cleardoublepage
+    % 规范 3.10：中文摘要之前单面印刷，此处同样用 \clearpage。
+    \clearpage
     \vskip \baselineskip
     \ifcug@bachelor
         {\sffamily\cug@sanhao{中国地质大学（武汉）本科生学位论文\cug@@extrapages@type}}
@@ -464,7 +467,7 @@
     \hspace{2.6em} \makebox[3em][r]{#1} -- \makebox[3em][l]{#2}\quad  #3; \hfill\par 
 }
 \newcommand{\cug@make@authorcv}{%
-    \cleardoublepage
+    \clearpage   % 规范 3.10：中文摘要之前单面印刷
     \leavevmode 
     \vspace*{\baselineskip}
     % 附件 6 的实际标题是「作者简历」（规范 1.6 正文里叫「作者简介」），以附件为准
@@ -550,7 +553,8 @@
 %---- 封面排版 ----
 % 纵向位置取自对附件 12「封面样式」图逐行检测的结果（单位 cm，自纸张上边缘起算）。
 \newcommand{\cug@make@cover}{%
-    \begin{titlepage}%
+    % 同上，不用 titlepage（它同样会插空白页）
+    \clearpage
     \thispagestyle{empty}%
     \begin{tikzpicture}[remember picture, overlay]
         \node[inner sep=0pt, anchor=center] at (current page.center) {%
@@ -583,7 +587,46 @@
             at ([xshift=10.5cm, yshift=-28.15cm]current page.north west)
             {\@date};
     \end{tikzpicture}%
-    \end{titlepage}%
+    \clearpage
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%% 书脊（规范 3.3）%%%%%%%%%%%%%%%%%%%%%%%%
+% 规范 3.3：「论文封面的书脊用仿宋，上方写题目，中间写作者姓名，
+%           下方写"中国地质大学（武汉）"。」
+%
+% 用法：\cugbookspine{10.7mm}      参数 = 书脊厚度
+%   厚度估算：页数 ÷ 2 × 每张纸厚 + 封面卡纸厚
+%     · 70 g 纸约 0.08 mm／张，80 g 约 0.10 mm，100 g 约 0.12 mm
+%     · 例：正文 200 页 ÷ 2 × 0.10 mm + 封面卡纸 0.7 mm ≈ 10.7 mm
+%   拿不准就直接量一沓内页（用卡尺量 100 张更准）。
+%
+% 生成的是一页 A4，中间一条虚线框标出「高 260 mm × 宽 <厚度>」的书脊，
+% 文字按竖排摆放。直接打印后沿线裁下，或把该页交给印厂。
+\newcommand{\cugbookspine}[1]{%
+    \clearpage
+    \thispagestyle{empty}%
+    \phantomsection
+    % 用 overlay 排版：它的坐标相对整页，不受版心边距约束。
+    % （A4 去掉上下各 3cm 页边距后只剩 237mm 可排版高度，装不下 297mm 的书脊；
+    %   用普通 center 环境会把整条书脊挤到页面外。）
+    \begin{tikzpicture}[remember picture, overlay]
+        % 书脊本体：实长 280mm（A4 纸高 297mm，两端各留 8.5mm 余量），
+        % 宽 = 参数 #1，文字用仿宋、竖排（rotate=90）。
+        \node[draw, dashed, gray, inner sep=3mm, rotate=90,
+              anchor=center, font=\cugbookspinefont\cug@sihao]
+            at (current page.center) {%
+                \makebox[280mm][s]{%
+                    \@title\hfill \@author\hfill 中国地质大学（武汉）}%
+            };
+        % 页面左下角的说明（书脊只占中间约 1cm 宽，两侧留白很多）
+        \node[anchor=south west, inner sep=0pt, align=left, text width=7.2cm,
+              font=\cug@wuhao\sffamily]
+            at ([xshift=2cm, yshift=2cm]current page.south west) {%
+                【书脊样式】宽 #1（高 280mm）\\
+                上方题目／中间作者／下方校名，仿宋字体\ \ （规范 3.3）\\
+                沿虚线裁下即可；若整本交印厂，把这一页一并给出。\\
+                厚度按论文实际厚度填：页数 $\div$ 2 $\times$ 每张纸厚 $+$ 封面卡纸厚};
+    \end{tikzpicture}%
     \clearpage
 }
 
@@ -596,7 +639,7 @@
     \appto\cug@committee@body{#1 & #2 & #3 & #4 \\[0.5\baselineskip]}%
 }
 \newcommand{\makecommitteelist}{%
-    \cleardoublepage
+    \clearpage   % 规范 3.10：中文摘要之前单面印刷
     \thispagestyle{empty}%
     \phantomsection
     \vspace*{\baselineskip}

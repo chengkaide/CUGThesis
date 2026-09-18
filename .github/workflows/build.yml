@@ -1,0 +1,37 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: 编译示例文档
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 用 TeX Live 官方镜像编译三个文档。
+      # 注意：CI 上没有宋体/黑体，字体回退链会退到 Fandol —— 字形与宋体不同，
+      # 但足以验证「代码能否编译通过」。字体效果请在本机核对。
+      - name: 编译 demo.tex / example.tex / sample.tex
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: |
+            demo.tex
+            example.tex
+            sample.tex
+          latexmk_use_xelatex: true
+          args: -interaction=nonstopmode -halt-on-error -file-line-error
+
+      - name: 上传编译产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdfs
+          path: |
+            demo.pdf
+            example.pdf
+            sample.pdf
+          if-no-files-found: error
