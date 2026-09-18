@@ -14,3 +14,14 @@ timozer*
 _minted-cache
 imgs
 images
+
+# ── 本仓库补充 ──────────────────────────────
+# 本地工具目录（审阅脚本、工作记录），不随仓库分发
+.workbuddy/
+# minted 运行时产生的缓存
+*.data.minted
+# XeLaTeX 字体缺失日志
+missfont.log
+*.synctex.gz
+# 封面预览的中间产物：只提交 cov-*.tex 源码，PDF 由 cover-options.pdf 代表
+coverpreview/*.pdf

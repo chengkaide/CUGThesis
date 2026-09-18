@@ -15,6 +15,19 @@
 
 \RequirePackage{etoolbox}
 \RequirePackage{xcolor}
+\RequirePackage{graphicx}
+
+% 示例文档插图：图片缺失时画一个占位框，而不是中断编译。
+% 模板仓库为控制体积未附带 imgs/ 目录（见 .gitignore），
+% 因此 demo.tex 在没有这些截图时也应当能编译通过。
+% 用法：\cugdemoimage{width=.5\textwidth}{./imgs/xxx.png}
+\NewDocumentCommand{\cugdemoimage}{m m}{%
+    \IfFileExists{#2}%
+        {\includegraphics[{#1}]{#2}}%
+        {\fbox{\begin{minipage}[c][3.2cm][c]{0.4\textwidth}\centering
+            \ttfamily\small [示例图片未随模板提供]\\[3pt]
+            \textrm{\footnotesize\detokenize{#2}}\end{minipage}}}%
+}
 
 \NewDocumentCommand{\tilcode}{m}{\colorbox{lightgray!50}{\ttfamily\small #1}}
 \NewDocumentCommand{\cmd}{m}{\texttt{\small $\backslash$#1}}

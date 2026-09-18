@@ -1,0 +1,23 @@
+%!TEX TS-program = xelatex
+% =============================================================
+%  封面样式对照：硕士（学术型）
+%  由 make_cover_preview.py 生成，改样式请改 cugthesis.cls 里的 \cug@make@cover
+% =============================================================
+\documentclass[master]{cugthesis}
+%% ---------------- 示例论文信息（随意填充）----------------
+\cugthesistitle{东昆仑造山带晚古生代花岗岩锆石 U-Pb 年代学与地球化学特征}%
+    {Zircon U-Pb Geochronology and Geochemistry of Late Paleozoic Granitoids in the East Kunlun Orogenic Belt}
+\cugthesisauthor{张三}{Zhang San}
+\studentid{1202611347}
+\cugthesismajor{地质学}{Geology}
+\cugthesisteacher{某某某\quad 教授}{Prof.\ XXX}
+\educatingunit{地球科学学院}
+\cugthesisdate{2026}{6}
+\cugclassnumber{P588}        % 分类号，查《中国图书馆分类法》
+\cugsecretlevel{公开}        % 密级
+
+\begin{document}
+\makeatletter
+\cug@make@cover
+\makeatother
+\end{document}

@@ -12,6 +12,8 @@
 \cugthesisauthor{王震宇}{Zhenyu Wang}
 \educatingunit{计算机学院}
 \cugthesisdate{2018}{3}
+\cugclassnumber{P5}          % 分类号（封面用，规范 1.1）
+\cugsecretlevel{公开}        % 密级（封面用，规范 1.1 / 2.2）
 
 \begin{document}
 
@@ -31,6 +33,15 @@
                 Van ''(Version 2015).}
 
 \cugkeywords{中国地质大学; 学位论文;  \LaTeX{} 模板; 研究生}{CUGThesis; \LaTeXe{} Template}
+
+% 学位论文答辩委员会名单（规范 1.7 / 附件 7）
+% \cugcommitteemember{职务}{姓名}{职称}{单位}
+% 会由 \makefrontpages 自动排在中文摘要之前；尚未答辩时可先注释掉。
+\cugcommitteemember{主席}{李某某}{教授}{中国地质大学（武汉）}
+\cugcommitteemember{委员}{张某某}{教授}{武汉大学}
+\cugcommitteemember{委员}{王某某}{教授}{中国地质大学（武汉）}
+\cugcommitteemember{委员}{陈某某}{副教授}{中国地质大学（武汉）}
+\cugcommitteemember{秘书}{赵某某}{讲师}{中国地质大学（武汉）}
 
 \makefrontpages 
 
@@ -157,38 +168,38 @@
 进入首页, 点击右边的注册按钮.
 
 \begin{tfig}{Overleaf 注册账号1}{fig:overleaf_usage_1}
-    \includegraphics[width=.5\textwidth]{./imgs/overleaf_usage/2.png}
+    \cugdemoimage{width=.5\textwidth}{./imgs/overleaf_usage/2.png}
 \end{tfig}
 
 在接下来的页面中输入邮箱和密码, 点击绿色按钮进行注册,
 如图\ref{fig:overleaf_usage_2} 所示.
 
 \begin{tfig}{Overleaf 注册账号2}{fig:overleaf_usage_2}
-    \includegraphics[width=.5\textwidth]{./imgs/overleaf_usage/3.png}
+    \cugdemoimage{width=.5\textwidth}{./imgs/overleaf_usage/3.png}
 \end{tfig}
 
 注册完成后, 在接下来的页面中点击创建一个项目, 选择上传项目,
 如图\ref{fig:overleaf_usage_3} 所示.
 
 \begin{tfig}{Overleaf  创建项目1}{fig:overleaf_usage_3}
-    \includegraphics[width=.5\textwidth]{./imgs/overleaf_usage/5.png}
+    \cugdemoimage{width=.5\textwidth}{./imgs/overleaf_usage/5.png}
 \end{tfig}
 
 在弹出的窗口中点击绿色按钮, 选择之前下载的模板文件,
 如图\ref{fig:overleaf_usage_4},\ref{fig:overleaf_usage_5}所示.
 
 \begin{tfig}{Overleaf  创建项目2}{fig:overleaf_usage_4}
-    \includegraphics[width=.5\textwidth]{./imgs/overleaf_usage/6.png}
+    \cugdemoimage{width=.5\textwidth}{./imgs/overleaf_usage/6.png}
 \end{tfig}
 
 \begin{tfig}{Overleaf  创建项目3}{fig:overleaf_usage_5}
-    \includegraphics[width=.5\textwidth]{./imgs/overleaf_usage/7.png}
+    \cugdemoimage{width=.5\textwidth}{./imgs/overleaf_usage/7.png}
 \end{tfig}
 
 点击打开, 进入上传页面, 如图\ref{fig:overleaf_usage_6}所示, 静静等待上传完毕.
 
 \begin{tfig}{Overleaf  创建项目4}{fig:overleaf_usage_6}
-    \includegraphics[width=.5\textwidth]{./imgs/overleaf_usage/8.png}
+    \cugdemoimage{width=.5\textwidth}{./imgs/overleaf_usage/8.png}
 \end{tfig}
 
 上传完成后, 进入项目页面, 如图\ref{fig:overleaf_usage_7} 所示. 在上传完成后,
@@ -198,24 +209,24 @@ Overleaf 会进行一次编译尝试, 因为其默认编译方式与本模板不
 主文档设置为 demo.tex .
 
 \begin{tfig}{Overleaf   项目设置1}{fig:overleaf_usage_7}
-    \includegraphics[width=.5\textwidth]{./imgs/overleaf_usage/9.png}
+    \cugdemoimage{width=.5\textwidth}{./imgs/overleaf_usage/9.png}
 \end{tfig}
 
 \begin{tfig}{Overleaf  项目设置 2}{fig:overleaf_usage_8}
-    \includegraphics[width=.5\textwidth]{./imgs/overleaf_usage/10.png}
+    \cugdemoimage{width=.5\textwidth}{./imgs/overleaf_usage/10.png}
 \end{tfig}
 
 对项目设置完毕后, 接下来点击左侧文件浏览器中的 demo.tex 文件, 然后点击右侧重新
 编译, 如图\ref{fig:overleaf_usage_9} 所示.
 
 \begin{tfig}{Overleaf   编译}{fig:overleaf_usage_9}
-    \includegraphics[width=.5\textwidth]{./imgs/overleaf_usage/11.png}
+    \cugdemoimage{width=.5\textwidth}{./imgs/overleaf_usage/11.png}
 \end{tfig}
 
 静静等待一段时间后, 编译成功, 如图\ref{fig:overleaf_usage_10}所示.
 
 \begin{tfig}{Overleaf   编译结果}{fig:overleaf_usage_10}
-    \includegraphics[width=.5\textwidth]{./imgs/overleaf_usage/12.png}
+    \cugdemoimage{width=.5\textwidth}{./imgs/overleaf_usage/12.png}
 \end{tfig}
 
 至此, 即可开始自己的写论文之旅了.
@@ -704,12 +715,11 @@ Developed!
 添加在线编译器 overleaf 的使用方法.
 
 \backmatter{}
-\cugthesisacknowledgements
-
-%\chapter{致谢}
-
-% 这里是参考文献
+% 规范 1.13 / 1.14 / 1.15 的顺序是：参考文献 -> 致谢 -> 附录。
+% 旧版示例把致谢写在参考文献之前，容易被直接照抄，此处修正。
 \cugthesisbib{tex}
+
+\cugthesisacknowledgements
 
 \appendix
 \chapter{文档示例}

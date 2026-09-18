@@ -1,4 +1,3 @@
-
 % !TEX TS-program xelatex
 % !TEX encoding = UTF-8 Unicode
 % -*- coding: UTF-8; -*-
@@ -8,50 +7,133 @@
 %%  FileName: cugthesisfont.sty
 %%  Author:   Timozer
 %%  E-mail:   zhenyuwang94@gmail.com
-%% 
+%%
+%%  Modified: 2026/09/18
+%%    字体策略改为「探测 + 回退链 + 缺失报错」。
+%%    背景：旧版把 \setmainfont、\setCJKmainfont 等整段注释掉，
+%%    字体完全交给 ctex 依编译环境自动决定 —— Windows 下是宋体/黑体，
+%%    Overleaf(Linux) 下退化为 Fandol，同一份源码渲染结果不同。
+%%    而《研究生学位论文写作规范》(2025) 明确要求：
+%%      中文正文 → 宋体      中文标题 → 黑体      西文 → Times New Roman
+%%    故此处显式指定，并按「系统字体 → 开源等价字体」顺序回退；
+%%    全部缺失时直接报错，绝不静默换字体。
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\ProvidesPackage{cugthesisfont}[2018/03/13 Provide Chinese Environment]
+\ProvidesPackage{cugthesisfont}[2026/09/18 v0.2 CUGThesis font setup]
 
 \RequirePackage{fontspec}
 \RequirePackage{xeCJK}
 
-%------------- Fonts Settings -------------
-%\defaultfontfeatures{Path = fonts/cn/, Mapping = tex-text}
-%\defaultfontfeatures{Mapping = tex-text}
+%──────────────────────────────────────────────────────────
+%  实际选用结果（供 \cugfontsreport 输出，便于投稿前核对）
+%──────────────────────────────────────────────────────────
+\newcommand{\cug@cjk@serif@name}{（未设置）}
+\newcommand{\cug@cjk@sans@name}{（未设置）}
+\newcommand{\cug@latin@name}{（未设置）}
+\newcommand{\cug@latin@note}{}
 
-%------------- Fonts Define ---------------
-% if you want to use more fonts, please do it like blow
-%\newCJKfontfamily[family]\cmd{font.file}
-%\newCJKfontfamily[SmallCaps]\SCF{SmallCaps.otf}
+%──────────────────────────────────────────────────────────
+%  中文字体
+%──────────────────────────────────────────────────────────
+\newif\ifcug@cjk@done
+\cug@cjk@donefalse
 
-%%------------- Chinese Fonts  -------------
-%\setCJKmainfont[ 
-        %BoldFont = SourceHanSerifSC-Bold, 
-        %ItalicFont = STKaiti,
-        %%BoldItalicFont = STKaiti-SC-Bold,
-    %]{SourceHanSerifSC-Regular}
-%\setCJKsansfont[
-    %BoldFont = SourceHanSansSC-Bold, 
-    %]{SourceHanSansSC-Regular}
-%\setCJKmonofont[
-    %BoldFont = SourceHanSansSC-Bold, 
-    %]{SourceHanSansSC-Regular}
+% #1 正文宋体   #2 标题黑体   #3 等宽
+\newcommand{\cug@set@cjkfonts}[3]{%
+    \setCJKmainfont[AutoFakeBold=2.5]{#1}%
+    \setCJKsansfont[AutoFakeBold=2.5]{#2}%
+    \setCJKmonofont{#3}%
+    \renewcommand{\cug@cjk@serif@name}{#1}%
+    \renewcommand{\cug@cjk@sans@name}{#2}%
+    \cug@cjk@donetrue
+}
 
-%%%%------------- English Fonts  -------------
-%\setmainfont[
-    %ItalicFont = {Times New Roman Italic},
-    %BoldFont = {Times New Roman Bold},
-    %BoldItalicFont = {Times New Roman Bold Italic},
-    %SmallCapsFont = {Bodoni 72 Smallcaps},
-    %%SmallCapsFeatures={Letters=SmallCaps},
-%]{Times New Roman}
-%\setsansfont{Optima}
-%\setmonofont[BoldFont=Source Code Pro Semibold]{Source Code Pro}
+% 1) 系统宋体 / 黑体 —— 与规范用词完全一致，首选
+\IfFontExistsTF{SimSun}{%
+    \IfFontExistsTF{SimHei}{\cug@set@cjkfonts{SimSun}{SimHei}{SimHei}}{}%
+}{}
+% 2) 思源宋体 / 思源黑体（SIL OFL 授权，可商用，跨平台字形一致）
+\ifcug@cjk@done\else
+    \IfFontExistsTF{Source Han Serif SC}{%
+        \IfFontExistsTF{Source Han Sans SC}{%
+            \cug@set@cjkfonts{Source Han Serif SC}{Source Han Sans SC}{Source Han Sans SC}%
+        }{}%
+    }{}%
+\fi
+% 3) Noto CJK —— 思源的 Google 发行名
+\ifcug@cjk@done\else
+    \IfFontExistsTF{Noto Serif CJK SC}{%
+        \IfFontExistsTF{Noto Sans CJK SC}{%
+            \cug@set@cjkfonts{Noto Serif CJK SC}{Noto Sans CJK SC}{Noto Sans CJK SC}%
+        }{}%
+    }{}%
+\fi
+% 4) Fandol —— TeX Live 自带，最后兜底（字形与宋体差异明显）
+\ifcug@cjk@done\else
+    \IfFontExistsTF{FandolSong-Regular}{%
+        \IfFontExistsTF{FandolHei-Regular}{%
+            \cug@set@cjkfonts{FandolSong-Regular}{FandolHei-Regular}{FandolHei-Regular}%
+        }{}%
+    }{}%
+\fi
+\ifcug@cjk@done\else
+    \PackageError{cugthesisfont}{%
+        找不到任何可用的中文字体。\MessageBreak
+        已依次尝试：宋体(SimSun)、思源宋体、Noto Serif CJK SC、Fandol。\MessageBreak
+        请先安装宋体与黑体，或安装思源宋体/思源黑体后重试%
+    }{%
+        规范要求中文正文用宋体、各级标题用黑体。\MessageBreak
+        Linux/服务器环境可安装 fonts-noto-cjk 或 fonts-arphic-* 系列。%
+    }%
+\fi
 
+%──────────────────────────────────────────────────────────
+%  西文字体：Times New Roman（规范 3.5 / 3.6 / 3.7 / 3.8 均明确要求）
+%──────────────────────────────────────────────────────────
+\newcommand{\cug@set@latinfonts}[1]{%
+    \setmainfont{#1}%
+    \setsansfont{#1}%  各级标题（黑体）中的西文同样是 Times New Roman
+    \renewcommand{\cug@latin@name}{#1}%
+}
+
+\IfFontExistsTF{Times New Roman}{%
+    \cug@set@latinfonts{Times New Roman}%
+}{%
+    \IfFontExistsTF{TeX Gyre Termes}{%
+        \cug@set@latinfonts{TeX Gyre Termes}%
+        \renewcommand{\cug@latin@note}{%
+            （本机无 Times New Roman，已改用公制兼容的 TeX Gyre Termes，字宽字高一致）}%
+    }{%
+        \IfFontExistsTF{Liberation Serif}{%
+            \cug@set@latinfonts{Liberation Serif}%
+            \renewcommand{\cug@latin@note}{%
+                （本机无 Times New Roman，已改用公制兼容的 Liberation Serif，字宽字高一致）}%
+        }{%
+            \PackageError{cugthesisfont}{%
+                找不到任何可用的西文字体。\MessageBreak
+                已依次尝试：Times New Roman、TeX Gyre Termes、Liberation Serif%
+            }{%
+                规范要求西文用 Times New Roman。\MessageBreak
+                若无法安装该字体，建议安装 tex-gyre 宏包使用 TeX Gyre Termes。%
+            }%
+        }%
+    }%
+}
+
+% 等宽字体仅用于代码环境，无规范要求
+\IfFontExistsTF{Consolas}{\setmonofont{Consolas}}{%
+    \IfFontExistsTF{Latin Modern Mono}{\setmonofont{Latin Modern Mono}}{}%
+}
+
+%──────────────────────────────────────────────────────────
+%  中文字号定义（磅值按规范）
+%  行距倍数默认取 1.3（原实现用 \baselinestretch，而正文已把它复位为 1，
+%  直接沿用会让各级标题/声明页的行距塌成 1 倍）。正文本身的行距
+%  由 cugthesis.cls 中的 \normalsize 固定为 20 磅，不经过这里。
+%──────────────────────────────────────────────────────────
 \def\cug@define@fontsize#1#2{%
-    \expandafter\newcommand\csname #1\endcsname[1][\baselinestretch]{%
+    \expandafter\newcommand\csname #1\endcsname[1][1.3]{%
         \fontsize{#2}{##1\dimexpr #2}\selectfont}}
 
 \cug@define@fontsize{cug@chuhao}{42bp}
@@ -66,5 +148,20 @@
 \cug@define@fontsize{cug@xiaosi}{12bp}
 \cug@define@fontsize{cug@wuhao}{10.5bp}
 \cug@define@fontsize{cug@xiaowu}{9bp}
-%\setlength{\parindent}{2em}
+
+%──────────────────────────────────────────────────────────
+%  字体自检报告：投稿前可在正文任意处调用一次核对
+%──────────────────────────────────────────────────────────
+\newcommand{\cugfontsreport}{%
+    \begingroup
+    \cug@wuhao
+    \par\noindent\rule{\textwidth}{0.4pt}\par
+    \noindent\textbf{字体自检}\par
+    \noindent 中文正文（规范要求宋体）：\cug@cjk@serif@name\par
+    \noindent 中文标题（规范要求黑体）：\cug@cjk@sans@name\par
+    \noindent 西文（规范要求 Times New Roman）：\cug@latin@name\cug@latin@note\par
+    \noindent\rule{\textwidth}{0.4pt}\par
+    \endgroup
+}
+
 \endinput

@@ -1,36 +1,69 @@
 %!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+% -*- coding: UTF-8; -*-
 % vim: set fenc=utf-8
 
-% -*- coding: UTF-8; -*-
-%!TEX encoding = UTF-8 Unicode 
+% =============================================================
+%  最小可用示例：把下面各处换成你自己的内容即可。
+%  编译：xelatex -shell-escape example.tex   （Windows 下可直接跑 build.bat example）
+%  格式要求一律以研究生院最新版《研究生学位论文写作规范》为准，见 README 的免责声明。
+% =============================================================
+
 \documentclass[master]{cugthesis}
+% 学位类型二选一：doctor / master / masterprofulltime / masterpronofulltime
 
-\cugthesistitle{中国地质大学研究生学位论文 \LaTeXe{} 模板}{\cugthesis\ \LaTeXe{} 模板}
-\cugthesisauthor{王震宇}{Zhenyu Wang}
+% ---------------- 基本信息 ----------------
+\cugthesistitle{论文中文题目}{English Title of the Thesis}
+\cugthesisauthor{姓名}{Name}
 \studentid{1201711347}
-\cugthesismajor{计算机科学与技术}{Computer Science}
-\cugthesisteacher{蔡之华}{Zhihua Cai}
-\educatingunit{计算机学院}
-\cugthesisdate{2018}{3}
+\cugthesismajor{学科专业}{Major}
+\cugthesisteacher{导师姓名\quad 教授}{Supervisor}     % \quad 之后写职称
+%\cugthesisteachertwo{第二导师}{Second Supervisor}    % 副导师/企业导师（可选）
+\educatingunit{培养单位}
+\cugthesisdate{2026}{6}
 
-\cugabstract{中文摘要}{English Abstract}
-\cugkeywords{关键字}{Keywords} 
+% ---------------- 封面字段（规范 1.1 / 附件 12）----------------
+\cugclassnumber{P5}          % 分类号，查《中国图书馆分类法》
+\cugsecretlevel{公开}        % 密级；公开论文可写「公开」或不填
+
+% ---------------- 摘要 ----------------
+\cugabstract{
+    中文摘要内容……
+
+    关键词另起一行，一般 3～5 个。
+}{English abstract here.}
+
+\cugkeywords{关键词一; 关键词二; 关键词三}{Keyword1; Keyword2; Keyword3}
+
+% ---------------- 答辩委员会名单（规范 1.7 / 附件 7）----------------
+% 会排在中文摘要之前；如当年尚未答辩，可先注释掉
+\cugcommitteemember{主席}{姓名}{教授}{单位}
+\cugcommitteemember{委员}{姓名}{教授}{单位}
+\cugcommitteemember{委员}{姓名}{教授}{单位}
+\cugcommitteemember{秘书}{姓名}{讲师}{单位}
+
 \begin{document}
-    \makefrontpages 
-    % 你的正文
-    \chapter{这是第一章}
-    % 更多内容
-    \section{这是一级标题}
-    % 更多内容
-    \subsection{这是二级标题}
-    % 更多内容
 
+    % 封面、中英文题名页、原创性声明、导师承诺书、使用授权书、
+    % 作者简介、答辩委员会名单、中英文摘要、目录、图清单、表清单
+    % —— 全部由下面这一条命令生成（作者简介内容写在 authorcv.tex 里）
+    \makefrontpages
+
+    % ---------------- 正文 ----------------
+    \chapter{绪论}
+    \section{研究背景}
+    正文内容……段落首行自动缩进 2 个汉字符。
+
+    \chapter{结论}
+
+    % ---------------- 后置部分 ----------------
+    % 规范 1.13 / 1.14 / 1.15 的顺序：参考文献 -> 致谢 -> 附录
     \backmatter
-    \chapter{致谢}
-    % 致谢内容
-    %\cugthesisbib{参考文献数据库文件名}
+    \cugthesisbib{tex}              % 把 tex 换成你的 .bib 文件名（不含扩展名）
+    \cugthesisacknowledgements      % 致谢
 
     \appendix
-    \chapter{这是附录A}
-    % 这里是附录内容
+    \chapter{附录 A}
+    附录内容……
+
 \end{document}
