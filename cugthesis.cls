@@ -11,12 +11,21 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\ProvidesClass{cugthesis}[2018/03/13 Version 0.1 China University of Geosciences Thesis Template]
+\ProvidesClass{cugthesis}[2026/09/18 v0.2 China University of Geosciences Thesis Template]
+
+% 版本沿革：
+%   0.1  2018/03/13  原作者 Timozer（王震宇）版，依据 2015 年版规范
+%   0.2  2026/09/18  依 2025 年 5 月版规范全面校准，含附件 1-12 逐页复核
+% 需要自检时在正文里写 \cugthesisversion。
+\def\cug@thesis@version{0.2}
+\def\cug@thesis@date{2026/09/18}
 
 \newif\ifcug@doctor\cug@doctorfalse
 \newif\ifcug@master\cug@mastertrue  % default the student's degree is master
 \newif\ifcug@masterprofulltime\cug@masterprofulltimefalse
 \newif\ifcug@masterpronofulltime\cug@masterpronofulltimefalse
+\newif\ifcug@equaldoctor\cug@equaldoctorfalse   % 同等学力博士
+\newif\ifcug@equalmaster\cug@equalmasterfalse     % 同等学力硕士
 \newif\ifcug@bachelor\cug@bachelorfalse
 
 \newif\ifcug@bib@style@sec\cug@bib@style@secfalse
@@ -27,11 +36,22 @@
     % 摘要、目录等前置部分是否显示页眉文字。
     % 规范 2.4 规定"页眉从第一章开始"，故默认关闭（只保留外侧页码）。
 
-\DeclareOption{doctor}{\cug@doctortrue\cug@masterfalse\cug@masterprofulltimefalse\cug@masterpronofulltimefalse\cug@bachelorfalse}
-\DeclareOption{master}{\cug@mastertrue\cug@doctorfalse\cug@masterprofulltimefalse\cug@masterpronofulltimefalse\cug@bachelorfalse}
-\DeclareOption{masterprofulltime}{\cug@masterprofulltimetrue\cug@doctorfalse\cug@masterfalse\cug@masterpronofulltimefalse\cug@bachelorfalse}
-\DeclareOption{masterpronofulltime}{\cug@masterpronofulltimetrue\cug@doctorfalse\cug@masterfalse\cug@masterprofulltimefalse\cug@bachelorfalse}
-\DeclareOption{bachelor}{\cug@bachelortrue\cug@doctorfalse\cug@masterfalse\cug@masterprofulltimefalse\cug@masterpronofulltimefalse}
+% 学位类型开关。先全部关掉再打开一个，避免选项组合时出现两种类型同时为真。
+% 加新类型时只需在此追加一行，不必逐个去改其它选项的关闭列表。
+\newcommand{\cug@clear@degreetype}{%
+    \cug@doctorfalse \cug@masterfalse
+    \cug@masterprofulltimefalse \cug@masterpronofulltimefalse
+    \cug@equaldoctorfalse \cug@equalmasterfalse
+    \cug@bachelorfalse}
+
+\DeclareOption{doctor}{\cug@clear@degreetype\cug@doctortrue}
+\DeclareOption{master}{\cug@clear@degreetype\cug@mastertrue}
+\DeclareOption{masterprofulltime}{\cug@clear@degreetype\cug@masterprofulltimetrue}
+\DeclareOption{masterpronofulltime}{\cug@clear@degreetype\cug@masterpronofulltimetrue}
+% 规范 2.4 的页眉文字按学生类别分六种，除上面四种外还有两种「同等学力」：
+\DeclareOption{equaldoctor}{\cug@clear@degreetype\cug@equaldoctortrue}
+\DeclareOption{equalmaster}{\cug@clear@degreetype\cug@equalmastertrue}
+\DeclareOption{bachelor}{\cug@clear@degreetype\cug@bachelortrue}
 %\DeclareOption*{\PassOptionsToClass{\CurrentOption}{ctexbook}} % I don't want you to pass options to the ctexbook class
 
 \DeclareOption{bibsec}{\cug@bib@style@sectrue}
@@ -230,6 +250,20 @@
     \@entitlelogo{A Dissertation Submitted to China University of Geosciences \\ For the Part-Time Master of Professional Degree of \\ \cug@enmajor} 
     \renewcommand{\cug@info@table@majorname}{专业学位类别}
     \renewcommand{\cug@info@entable@majorname}{Professional Degree Category}
+\fi
+% 规范 2.4 的页眉「中国地质大学□」里，同等学力的两种写法是
+% 「同等学力博士学位论文」「同等学力硕士学位论文」。
+% 附件 12 没有对应的封面底图 —— 底图本身是通用版式（只有校名和
+% 「分类号：」「密　级：」标签，不含学位类型文字），故复用博士 / 硕士的底图。
+\ifcug@equaldoctor
+    \@titlelogo{同等学力博士学位论文}
+    \@entitlelogo{A Dissertation Submitted to China University of Geosciences \\ For the Doctor Degree of \cug@enmajor}
+    \renewcommand{\cug@degree@cn}{博士}
+    \renewcommand{\cug@degree@en}{Ph.D.}
+\fi
+\ifcug@equalmaster
+    \@titlelogo{同等学力硕士学位论文}
+    \@entitlelogo{A Dissertation Submitted to China University of Geosciences \\ For the Master Degree of \cug@enmajor}
 \fi
 \ifcug@bachelor
     % 本科封面标题。学校未在附件 12 中给出本科版式，此处沿用同一版式，
@@ -472,6 +506,13 @@
 % 故本科沿用同一版式的蓝色底图；拿到学校本科专用底图后，替换 cover/bachelor.jpg 即可。
 \ifcug@bachelor
     \renewcommand{\cug@coverimage}{cover/bachelor.jpg}
+\fi
+% 同等学力两种类型同样没有专用底图，复用博士 / 硕士的。
+\ifcug@equaldoctor
+    \renewcommand{\cug@coverimage}{cover/doctor.jpg}
+\fi
+\ifcug@equalmaster
+    \renewcommand{\cug@coverimage}{cover/master.jpg}
 \fi
 
 %---- 信息区标签宽度：专硕的标签是「专业学位类别」（6 字），其余为 4 字 ----
@@ -851,12 +892,21 @@
 % 旧版 font={small}，在 12pt 文档下 \small = 11pt，实测题注 10.91pt，偏大。
 \DeclareCaptionFont{cugwuhao}{\fontsize{10.5bp}{14pt}\selectfont}
 \captionsetup{labelsep=quad, font={cugwuhao,rm}, skip=10pt}
+
+% 中文文档常见的「行末挤出一个字」：断行困难时 TeX 宁可不报错也要硬塞，
+% 结果是 hbox 溢出、右边距参差。给一点弹性（仅在断行失败时启用）即可消除。
+% 实测：声明类页面（14 磅正文）原先溢出 36 磅，加上后归零。
+\setlength{\emergencystretch}{1em}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \let\oldequation=\theequation
 \renewcommand{\theequation}{{\cug@wuhao\oldequation}}
 
 % Logo
+% \cugthesis         —— 模板英文名，供英文题名页等处引用（保持原样，勿改成版本号）
+% \cugthesisversion  —— 版本自检，输出「CUGThesis v0.2（2026/09/18）」
 \NewDocumentCommand{\cugthesis}{}{CUGThesis}
+\NewDocumentCommand{\cugthesisversion}{}
+    {CUGThesis v\cug@thesis@version（\cug@thesis@date）}
 % 参考文献
 \RequirePackage[sort&compress]{natbib}
 \ifcug@bib@style@sec

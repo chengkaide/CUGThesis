@@ -396,10 +396,10 @@ OK, 如果您没有很多时间来学习, 您可以先看看 The Not So Short In
         \toprule
         命令 & 作用 & 用法 \\
         \midrule
-        \tcodeinline{tex}{\cugthesistitle} & 论文标题 & \tcodeinline{tex}{\cugthesistitle{cntitle}{entitle}} \\
-        \tcodeinline{tex}{\cugthesismajor} & 专业 & \tcodeinline{tex}{\cugthesismajor{cnmajor}{enmajor}} \\
-        \tcodeinline{tex}{\cugthesisteacher} & 指导老师 & \tcodeinline{tex}{\cugthesisteacher{cnname}{enname}} \\
-        \tcodeinline{tex}{\cugthesisauthor} &  作者姓名 & \tcodeinline{tex}{\cugthesisauthor{cnname}{enname}} \\
+        \tcodeinline{tex}{\cugthesistitle} & 论文标题 & \tcodeinline{tex}{\cugthesistitle{cn}{en}} \\
+        \tcodeinline{tex}{\cugthesismajor} & 专业 & \tcodeinline{tex}{\cugthesismajor{cn}{en}} \\
+        \tcodeinline{tex}{\cugthesisteacher} & 指导老师 & \tcodeinline{tex}{\cugthesisteacher{cn}{en}} \\
+        \tcodeinline{tex}{\cugthesisauthor} &  作者姓名 & \tcodeinline{tex}{\cugthesisauthor{cn}{en}} \\
         \tcodeinline{tex}{\studentid} & 学号 & \tcodeinline{tex}{\studentid{1201711347}} \\
         \tcodeinline{tex}{\educatingunit} & 培养单位 & \tcodeinline{tex}{\educatingunit{计算机学院}} \\
         \tcodeinline{tex}{\cugthesisdate} & 时间 & \tcodeinline{tex}{\cugthesisdate{2018}{3}} \\
@@ -433,7 +433,7 @@ OK, 如果您没有很多时间来学习, 您可以先看看 The Not So Short In
         \toprule
         命令 & 用法 \\
         \midrule
-        \tcodeinline{tex}{\cugabstract} & \tcodeinline{tex}{\cugabstract{这里是中文摘要}{Here is english abstract}} \\
+        \tcodeinline{tex}{\cugabstract} & \tcodeinline{tex}{\cugabstract{中文摘要}{Abstract}} \\
         \tcodeinline{tex}{\cugkeywords} & \tcodeinline{tex}{\cugkeywords{关键字}{Keywords}} \\
         \bottomrule
     \end{tabular}
@@ -692,7 +692,7 @@ Developed!
 2018年 3月17日 星期六 14时36分07秒 CST
 
 修正一个页眉的错误, 奇数页页眉要求是要显示博士学位论文, 硕士学位论文这几个字的. 我
-之前看的是附件, 没有主要到这一要求.
+之前看的是附件, 没有注意到这一要求.
 
 修正一个BUG\@. 博士选项开启时候会出现一个问题, 已经解决了.
 
@@ -713,6 +713,27 @@ Developed!
 2019-12-12 22:22
 
 添加在线编译器 overleaf 的使用方法.
+
+\section{Versino 0.5：依 2025 版规范全面校准}
+\label{sec:versino_0_5}
+
+2026-09
+
+学校于 2025 年 5 月修订了《研究生学位论文写作规范》，本版据此逐条校准，
+并对照附件 1--12 的实物样式复核。主要改动：
+
+\begin{itemize}
+    \item 字体：显式指定宋体 / 黑体 / Times New Roman，不再依赖编译环境自动探测
+          （旧版在 Windows 与 Overleaf 上渲染结果不同）
+    \item 正文行距改为固定值 20 磅；摘要标题 18 磅；图表题注 10.5 磅
+    \item 页眉位置、目录缩进、图表清单名称等按规范逐条修正
+    \item 新增中文封面、本科封面、学位论文答辩委员会名单
+    \item 声明类页面（原创性声明 / 导师承诺书 / 使用授权书）依附件实测改为
+          四号 14 磅配 2 / 2 / 1.5 倍行距，落款缩进亦按附件取值
+    \item 补上「同等学力博士 / 硕士」两种学位类型（规范 2.4 的页眉文字共六种）
+\end{itemize}
+
+逐项对照表见 README 的「格式说明」一节。
 
 \backmatter{}
 % 规范 1.13 / 1.14 / 1.15 的顺序是：参考文献 -> 致谢 -> 附录。

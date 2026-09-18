@@ -63,10 +63,13 @@
 
 \else
 
-    \RequirePackage{fancyvrb}
+    % fvextra = fancyvrb 的扩展，它才提供 breaklines（长行自动折行）。
+    % 只用 fancyvrb 的话，超过版心的代码行会直接顶出页边 ——
+    % 实测 demo.tex 中的长示例行溢出 142 磅（约 5 cm）。
+    \RequirePackage{fvextra}
 
     \PackageWarningNoLine{tcode}{%
-        代码环境已降级为 fancyvrb（无语法高亮）。\MessageBreak
+        代码环境已降级为 fvextra（无语法高亮）。\MessageBreak
         如需高亮：安装 Python 与 pygments/latexminted 后，\MessageBreak
         把 \string\usepackage{tcode} 改成 \string\usepackage[minted]{tcode}，\MessageBreak
         并给 xelatex 加上 -shell-escape 参数%
@@ -78,7 +81,7 @@
     \newcommand{\tcodeinline}[2]{\texttt{\detokenize{#2}}}
     \NewDocumentEnvironment{minted}{o m}{%
         \VerbatimEnvironment
-        \begin{Verbatim}%
+        \begin{Verbatim}[breaklines=true, breakanywhere=true]%
     }{%
         \end{Verbatim}%
     }
